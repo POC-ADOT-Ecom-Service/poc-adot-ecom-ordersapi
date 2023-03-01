@@ -22,7 +22,7 @@ spec:
       containers:
       - name: ordersapi
         image: iamnilanjan3/ecom-orders-api:latest
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         resources:
           limits:
             memory: "256Mi"

@@ -58,6 +58,7 @@ initialLoad()
  * As this is a straightforward simple condition, I have added them using if else condition here only.
  */
 app.get("/orders",async (req, res) => {
+	const requestStartTime = new Date().getMilliseconds();
 	// console.log("ji");
 	if(!req.query.oid && req.query.uid) {
 		Order.find({customerId:req.query.uid}).then( orders => {
@@ -94,7 +95,7 @@ app.get("/orders",async (req, res) => {
 
 // Create an order for a user
 app.post("/order", async (req, res) => {
-	
+	const requestStartTime = new Date().getMilliseconds();
 	const newOrder = {
 		"name":req.body.name,
 		"customerId":req.body.customerId,
@@ -121,7 +122,7 @@ app.post("/order", async (req, res) => {
 
 // Delete a single order
 app.delete("/orders/:oid", async (req, res) => {
-	
+	const requestStartTime = new Date().getMilliseconds();
 	Order.findByIdAndDelete(req.params.oid).then((order) => {
 		res.setHeader("traceID", JSON.parse(getTraceIdJson()).traceId)
 		if(order){
@@ -142,6 +143,7 @@ app.delete("/orders/:oid", async (req, res) => {
 app.delete("/orders", async (req, res) => {
 	// Order.findOneAndDelete({customerId: req.query.uid})
 	// Order.deleteMany({customerId : req.query.uid})
+	const requestStartTime = new Date().getMilliseconds();
 	Order.deleteMany({customerId : req.query.uid}).then((o) => {
 		res.setHeader("traceID", JSON.parse(getTraceIdJson()).traceId)
 		if(o.deletedCount > 0) {
