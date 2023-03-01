@@ -67,6 +67,7 @@ app.get("/orders",async (req, res) => {
 			else if(orders){
 				res.setHeader("traceId", JSON.parse(getTraceIdJson()).traceId).json(orders);
 				emitsPayloadMetric(res._contentLength + mimicPayLoadSize(), '/orders', res.statusCode);
+				emitReturnTimeMetric(new Date().getMilliseconds() - requestStartTime, '/user', res.statusCode);
 			}
 			else {
 				res.setHeader("traceId", JSON.parse(getTraceIdJson()).traceId)
@@ -81,6 +82,7 @@ app.get("/orders",async (req, res) => {
 			else if(order){
 				res.setHeader("traceId", JSON.parse(getTraceIdJson()).traceId).json(order);
 				emitsPayloadMetric(res._contentLength + mimicPayLoadSize(), '/orders', res.statusCode);
+				emitReturnTimeMetric(new Date().getMilliseconds() - requestStartTime, '/user', res.statusCode);
 			}
 			else {
 				res.setHeader("traceId", JSON.parse(getTraceIdJson()).traceId)
@@ -107,6 +109,7 @@ app.post("/order", async (req, res) => {
 	order.save().then((orderObj) => {
 		res.setHeader("traceID", JSON.parse(getTraceIdJson()).traceId).status(201).send(orderObj)
 		emitsPayloadMetric(res._contentLength + mimicPayLoadSize(), '/order', res.statusCode);
+		emitReturnTimeMetric(new Date().getMilliseconds() - requestStartTime, '/user', res.statusCode);
 	}).catch( (err) => {
 		if(err) {
 			throw err
@@ -124,6 +127,7 @@ app.delete("/orders/:oid", async (req, res) => {
 		if(order){
 			res.status(202).send("Order deleted with success...")
 			emitsPayloadMetric(res._contentLength + mimicPayLoadSize(), '/orders', res.statusCode);
+			emitReturnTimeMetric(new Date().getMilliseconds() - requestStartTime, '/user', res.statusCode);
 		}
 		else{
 			res.status(404).send("No order found...")
@@ -143,6 +147,7 @@ app.delete("/orders", async (req, res) => {
 		if(o.deletedCount > 0) {
 			res.send({"success":true})
 			emitsPayloadMetric(res._contentLength + mimicPayLoadSize(), '/orders', res.statusCode);
+			emitReturnTimeMetric(new Date().getMilliseconds() - requestStartTime, '/user', res.statusCode);
 		} else {
 			res.status(404).send({"success":false})
 		}
